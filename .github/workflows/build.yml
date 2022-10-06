@@ -41,13 +41,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       
-      - name: Terragrunt init
-        run: terragrunt init --terragrunt-non-interactive
-
       - name: Terragrunt plan
         run: terragrunt run-all plan --terragrunt-non-interactive
 
       - name: Terragrunt Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terragrunt apply-all --terragrunt-non-interactive
+        run: terragrunt run-all apply --terragrunt-non-interactive
 
