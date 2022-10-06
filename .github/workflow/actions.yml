@@ -1,0 +1,53 @@
+name: Terragrunt Full Teste
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terragrunt:
+    name: "Terragrunt"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform v1.2.6
+        uses: hashicorp/setup-Terraform@v1
+        with:
+          terraform-version: 1.2.6
+          terraform-wrapper: true
+      - name: Show terraform version
+        run: terraform --version
+
+      - name: Setup terraform wrapper
+        run: which terraform
+
+      - name: Setup terragrunt
+        run: |
+             wget -q -O /bin/terragrunt "https://github.com/gruntwork-io/terragrunt/releases/download/v0.39.1/terragrunt_linux_amd64"
+             sudo chmod +x /bin/terragrunt
+             terragrunt -v
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name: Terragrunt init
+        run: terragrunt init --terragrunt-non-interactive
+
+      - name: Terragrunt plan
+        run: terragrunt run-all plan --terragrunt-non-interactive
+
+      - name: Terragrunt Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terragrunt apply-all --terragrunt-non-interactive
+
