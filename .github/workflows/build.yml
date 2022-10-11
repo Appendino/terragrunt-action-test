@@ -45,6 +45,10 @@ jobs:
           role-to-assume: arn:aws:iam::563925327488:role/xoxota
           role-session-name: OIDCSession
       
+      - name: Sts caller
+        run: |
+          aws sts get-caller-identity
+
       - name: Configure Provider
         run: |
              cat <<EOF > common_terragrunt.hcl
