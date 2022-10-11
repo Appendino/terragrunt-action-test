@@ -63,7 +63,7 @@ jobs:
                backend = "s3"
                config = {
                  bucket = "bucetao2"
-                 key = "${path_relative_to_include()}/terraform.tfstate"
+                 key = "\${path_relative_to_include()}/terraform.tfstate"
                  region = local.aws_region
                  encrypt = true
                  dynamodb_table = "terrarunt-bucket-bucetao-lock"
