@@ -52,8 +52,8 @@ jobs:
       - name: Configure Provider
         run: |
              cat <<EOF > common_terragrunt.hcl
+
              locals {
-               env = get_env('ENVIROMENT', 'dev')
                aws_region = get_env('AWS_REGION', 'us-east-1')
              }
              inputs = {
