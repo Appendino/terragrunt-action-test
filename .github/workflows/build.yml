@@ -37,10 +37,30 @@ jobs:
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: arn:aws:iam::563925327488:role/xoxota
       
+      - name: Configure Provider
+        run: |
+             cat <<EOF > common_terragrunt.hcl
+             locals {
+               env = get_env('ENVIROMENT', 'dev')
+               aws_region = get_env('AWS_REGION', 'us-east-1')
+             }
+             inputs = {
+               env = local.env
+             }
+             remote_state {
+               backend = "s3"
+               config = {
+                 bucket = "terrarunt-bucket-bucetao"
+                 key = "${path_relative_to_include()}/terraform.tfstate"
+                 region = local.aws_region
+                 encrypt = true
+                 dynamodb_table = "terrarunt-bucket-bucetao-lock"
+               }
+             }
+             EOF
       - name: Terragrunt plan
         run: terragrunt run-all plan --terragrunt-non-interactive
 
