@@ -39,6 +39,7 @@ jobs:
         with:
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: arn:aws:iam::563925327488:role/xoxota
+          role-session-name: OIDCSession
       
       - name: Configure Provider
         run: |
