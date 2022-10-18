@@ -42,7 +42,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: ${{ secrets.AWS_REGION }}
-          role-to-assume: arn:aws:iam::563925327488:role/xoxota
+          role-to-assume: arn:aws:iam::321784826918:role/xoxota
           role-session-name: OIDCSession
       
       - name: Sts caller
